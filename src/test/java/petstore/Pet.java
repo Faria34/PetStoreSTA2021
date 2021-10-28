@@ -25,7 +25,7 @@ public class Pet {
     }
     // Incluir - creater - Post
     @Test // identifica o método ou função como um teste para o TestNG
-    public void incluitPet() throws IOException {
+    public void incluirPet() throws IOException {
         String jsonBody = lerJson("db/pet1.json");
 
         // Sintaxe - Gherkin
@@ -51,8 +51,8 @@ public class Pet {
 
     }
     @Test
-    public void consultarpet(){
-        String petId = "1979070653";
+    public void consultarPet(){
+        String petId = "1979070624";
         String token =
         given()
                 .contentType("application/json")
@@ -72,7 +72,44 @@ public class Pet {
         ;
         System.out.println("o token é " + token);
     }
+    @Test
+    public void alterarPet() throws IOException{
+      String jsonBody = lerJson("db/pet2.json");
 
+      given()
+              .contentType("application/json")
+              .log().all()
+              .body(jsonBody)
+      .when()
+              .put(uri)
+      .then()
+              .log().all()
+              .statusCode(200)
+              .body("name" ,is("Bob"))
+              .body("status", is("sold"))
+      ;
+
+    }
+
+    @Test
+    public void excluirPet(){
+        String petId = "1979070624";
+
+        given()
+                .contentType("application/json")
+                .log().all()
+        .when()
+                .delete(uri + "/" + petId)
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("code" , is(200))
+                .body("type", is ("unknown"))
+                .body("message", is (petId))
+
+        ;
+
+    }
     }
 
 
